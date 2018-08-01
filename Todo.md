@@ -1,0 +1,10 @@
+[ ] log severity levels -- 1_emergency, 2_alert, 3_critical, 4_error, 5_warning, 6_info, 7_debug, 8_trivial
+[ ] colored console output
+[ ] text or json output
+[ ] log file output
+[ ] on critical able to stop program
+[ ] logging depend on prod/dev
+[ ] timestamp + label + level + log
+[ ] split console - file output by levels
+[ ]
+[ ]
