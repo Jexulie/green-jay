@@ -6,5 +6,9 @@
 [ ] logging depend on prod/dev
 [ ] timestamp + label + level + log
 [ ] split console - file output by levels
-[ ]
-[ ]
+[ ] think about options !!
+[ ] user can change color scheme
+[ ] check ishex or not
+[ ] add hsl to color modify
+[ ] separate log files
+[ ] combined log files
