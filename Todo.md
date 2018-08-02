@@ -1,14 +1,14 @@
-- [ ] log severity levels -- 1_emergency, 2_alert, 3_critical, 4_error, 5_warning, 6_info, 7_debug, 8_trivial
-- [ ] colored console output
+- [x] log severity levels -- 1_emergency, 2_alert, 3_critical, 4_error, 5_warning, 6_info, 7_debug, 8_trivial
+- [x] colored console output
 - [ ] default colors for different levels
-- [ ] text or json output
-- [ ] log file output
+- [x] text or json output
+- [x] log file output
 - [ ] on critical able to stop program
 - [ ] logging depends on prod/dev
 - [ ] timestamp + label + level + log
 - [ ] split console - file output by levels
 - [ ] think about options !!
-- [ ] user can change color scheme
+- [x] user can change color scheme
 - [ ] check ishex or not
 - [ ] add hsl to color modify
 - [ ] separate log files
