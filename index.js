@@ -61,7 +61,7 @@ var Greenjay = {
      * @public
      */
     emergency: function(message){
-        var level = '1';
+        var level = 'Emergency';
         // check if modify has values
         if(Object.keys(this.mod).length === 0 && this.mod.constructor === Object){
             
@@ -82,7 +82,7 @@ var Greenjay = {
      * @public 
      */
     alert: function(message){
-        var level = '2';
+        var level = 'Alert';
         
     },
 
@@ -92,7 +92,7 @@ var Greenjay = {
      * @public 
      */
     critical: function(message){
-        var level = '3';
+        var level = 'Critical';
         
     },
 
@@ -102,7 +102,7 @@ var Greenjay = {
      * @public 
      */
     error: function(message){
-        var level = '4';
+        var level = 'Error';
            
     },
 
@@ -112,7 +112,7 @@ var Greenjay = {
      * @public 
      */
     warning: function (message){
-        var level = '5';
+        var level = 'Warning';
         
     },
 
@@ -122,7 +122,7 @@ var Greenjay = {
      * @public 
      */
     info: function(message){
-        var level = '6';
+        var level = 'Info';
         
     },
 
@@ -132,7 +132,7 @@ var Greenjay = {
      * @public 
      */
     debug: function(message){
-        var level = '7';
+        var level = 'Debug';
         
     },
 
@@ -142,7 +142,7 @@ var Greenjay = {
      * @public 
      */
     trivial: function(message){
-        var level = '8';
+        var level = 'Trivial';
         
     }
 

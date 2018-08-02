@@ -6,14 +6,19 @@ greenjay.createLogger({
     outputType: 'text' 
 },{
     date: {
-        color: '#069'
+        color: '#069',
+        modify: 'dim',
+        bg: '(83,11,39)'
     },
     message: {
-        modify: 'underline'
+        color: '(112,22,11)',
+        modify: 'dim',
+        bg: 'white'
     },
     level: {
-        color: 'white',
-        bg: 'red'
+        color: 'blue',
+        modify: 'inverse',
+        bg: '#77abce'
     }
 }
 );
