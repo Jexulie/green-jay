@@ -12,10 +12,13 @@ var Greenjay = {
 
     ops : {},
     mod : {},
+    
     defaultOps: {
         useFile: false,
-        filePath: './'
+        filePath: './',
+        outputType: 'text'
     },
+
     defaultModify: {
         date: {
 
@@ -33,7 +36,7 @@ var Greenjay = {
      * @public
      * @param {Object} options Logger Options Object.
      * @param {Object} [modify] Console Output Modify Object.
-     * @param {boolean} options.useConsole  Defines Should Logger Prints to Console.
+    * @param {boolean} [options.useConsol～e  Defines Should Logger Prints to Console.
      * @param {boolean} [options.useFile] Defines Should Logger Prints to File.
      * @param {string} [options.filePath] Defines Path to File. - creates folder if it doesn't exist
      * @param {string} options.outputType Defines Output Type. - 'text' or 'json'
@@ -68,10 +71,10 @@ var Greenjay = {
         }else{
             var checkedModifiers = controlModifiers(this.mod);
             if(this.ops.useConsole){
-                logToConsole(message, level, checkedModifiers);
+                logToConsole(message, level, checkedModifiers, this.ops.outputType);
             }else if(this.ops.useFile){
                 handleFiles(this.ops.filePath);
-                logToFile(message, checkedModifiers, this.ops.filePath);
+                logToFile(message, level, this.ops.filePath, this.ops.outputType);
             }
         }    
     },

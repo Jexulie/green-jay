@@ -1,8 +1,9 @@
 var greenjay = require('../index');
 
 greenjay.createLogger({
-    useConsole: true,
-    useFile: false,
+    useConsole: false,
+    useFile: true,
+    filePath: './error.log',
     outputType: 'text' 
 },{
     date: {
@@ -19,4 +20,7 @@ greenjay.createLogger({
 }
 );
 
-greenjay.emergency('hello');
+greenjay.emergency('hello ');
+// for(i = 0; i< 10;i++){
+    
+// }
