@@ -65,18 +65,14 @@ var Greenjay = {
      */
     emergency: function(message){
         var level = 'Emergency';
-        // check if modify has values
-        if(Object.keys(this.mod).length === 0 && this.mod.constructor === Object){
-            
-        }else{
+
+        if(this.ops.useConsole){
             var checkedModifiers = controlModifiers(this.mod);
-            if(this.ops.useConsole){
-                logToConsole(message, level, checkedModifiers, this.ops.outputType);
-            }else if(this.ops.useFile){
-                handleFiles(this.ops.filePath);
-                logToFile(message, level, this.ops.filePath, this.ops.outputType);                
-            }
-        }    
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }   
     },
 
     /**

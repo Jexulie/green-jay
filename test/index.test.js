@@ -1,25 +1,25 @@
 var greenjay = require('../index');
 
 greenjay.createLogger({
-    useConsole: false,
-    useFile: true,
+    useConsole: true,
+    useFile: false,
     filePath: 'dude/error.log',
     outputType: 'text' 
 },{
     date: {
-        color: 'blue',
-        modify: 'underline',
-        bg: '#069'
+        color: 'green'
     },
     message: {
-        modify: 'dim'
+        color: '#069'
     },
     level: {
-        bg: '#77abce'
+        bg: '#ea3'
     }
 }
 );
 
+
 for(i = 0; i<10; i++){
-    greenjay.emergency(Math.random() * i * 10)
+    greenjay.emergency('omg ' + i)
 }
+
