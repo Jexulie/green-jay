@@ -1,6 +1,6 @@
 {
   "name": "green-jay",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "dev in progress",
   "main": "index.js",
   "scripts": {

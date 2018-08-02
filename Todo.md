@@ -13,3 +13,4 @@
 - [ ] add hsl to color modify
 - [ ] separate log files
 - [ ] combined log files
+- [ ] date formatting options

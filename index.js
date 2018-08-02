@@ -3,16 +3,37 @@ var controlModifiers = require('./lib/logModifiers');
 var logToConsole = require('./lib/logToConsole');
 var logToFile = require('./lib/logToFile');
 
+/**
+ * Green-Jay Object.
+ * @author Jexulie <fejitj3n@yahoo.com>
+ * @version 0.1.0
+ */
 var Greenjay = {
 
     ops : {},
     mod : {},
+    defaultOps: {
+        useFile: false,
+        filePath: './'
+    },
+    defaultModify: {
+        date: {
+
+        },
+        message: {
+
+        },
+        level: {
+
+        }
+    },
 
     /**
      * Create Logger Options and Modify Console Output.
+     * @public
      * @param {Object} options Logger Options Object.
      * @param {Object} [modify] Console Output Modify Object.
-     * @param {boolean} [options.useConsole]  Defines Should Logger Prints to Console.
+     * @param {boolean} options.useConsole  Defines Should Logger Prints to Console.
      * @param {boolean} [options.useFile] Defines Should Logger Prints to File.
      * @param {string} [options.filePath] Defines Path to File. - creates folder if it doesn't exist
      * @param {string} options.outputType Defines Output Type. - 'text' or 'json'
@@ -29,120 +50,100 @@ var Greenjay = {
      * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      */
-    createLogger: function(options, modify = {}){
+    createLogger: function(options = this.defaultOps, modify = this.defaultModify){
         this.ops = options;
         this.mod = modify;
     },
     
     /**
      * Create Emergency Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public
      */
     emergency: function(message){
         var level = '1';
         // check if modify has values
         if(Object.keys(this.mod).length === 0 && this.mod.constructor === Object){
-            this.mod.level = level;
-            var checkedModifiers = controlModifiers();
+            
+        }else{
+            var checkedModifiers = controlModifiers(this.mod);
             if(this.ops.useConsole){
-                logToConsole(checkedModifiers);
+                logToConsole(message, level, checkedModifiers);
             }else if(this.ops.useFile){
                 handleFiles(this.ops.filePath);
-                logToFile(checkedModifiers, this.ops.filePath);
+                logToFile(message, checkedModifiers, this.ops.filePath);
             }
-        }       
+        }    
     },
 
     /**
      * Create Alert Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     alert: function(message){
         var level = '2';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-        }
+        
     },
 
     /**
      * Create Critical Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     critical: function(message){
         var level = '3';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-        }
+        
     },
 
     /**
      * Create Error Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     error: function(message){
         var level = '4';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-            
-        }
+           
     },
 
     /**
      * Create Warning Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     warning: function (message){
         var level = '5';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-        }
+        
     },
 
     /**
      * Create Info Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     info: function(message){
         var level = '6';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-        }
+        
     },
 
     /**
      * Create Debug Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     debug: function(message){
         var level = '7';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-        }
+        
     },
 
     /**
      * Create Trivial Level Log
-     * @param {string} message 
+     * @param {string} message
+     * @public 
      */
     trivial: function(message){
         var level = '8';
-        // check if modify has values
-        if(Object.keys(mod).length === 0 && mod.constructor === Object){
-            mod.level = level;
-            var checkedModifiers = controlModifiers();
-        }
+        
     }
 
 }
