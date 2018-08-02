@@ -15,3 +15,4 @@
 - [ ] combined log files
 - [ ] date formatting options
 - [ ] trim spaces in rgb
+- [ ] bg rgb is broken

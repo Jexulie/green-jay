@@ -6,9 +6,9 @@ greenjay.createLogger({
     outputType: 'text' 
 },{
     date: {
-        color: '#069',
+        color: 'blue',
         modify: 'underline',
-        bg: '(1,1,1)'
+        bg: '#069'
     },
     message: {
         modify: 'dim'
