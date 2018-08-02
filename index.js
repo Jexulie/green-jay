@@ -12,7 +12,7 @@ var Greenjay = {
 
     ops : {},
     mod : {},
-    
+
     defaultOps: {
         useFile: false,
         filePath: './',
@@ -74,7 +74,7 @@ var Greenjay = {
                 logToConsole(message, level, checkedModifiers, this.ops.outputType);
             }else if(this.ops.useFile){
                 handleFiles(this.ops.filePath);
-                logToFile(message, level, this.ops.filePath, this.ops.outputType);
+                logToFile(message, level, this.ops.filePath, this.ops.outputType);                
             }
         }    
     },

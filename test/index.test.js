@@ -3,7 +3,7 @@ var greenjay = require('../index');
 greenjay.createLogger({
     useConsole: false,
     useFile: true,
-    filePath: './error.log',
+    filePath: 'dude/error.log',
     outputType: 'text' 
 },{
     date: {
@@ -20,7 +20,6 @@ greenjay.createLogger({
 }
 );
 
-greenjay.emergency('hello ');
-// for(i = 0; i< 10;i++){
-    
-// }
+for(i = 0; i<10; i++){
+    greenjay.emergency(Math.random() * i * 10)
+}
