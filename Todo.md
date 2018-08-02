@@ -14,3 +14,4 @@
 - [ ] separate log files
 - [ ] combined log files
 - [ ] date formatting options
+- [ ] trim spaces in rgb

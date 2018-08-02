@@ -7,17 +7,13 @@ greenjay.createLogger({
 },{
     date: {
         color: '#069',
-        modify: 'dim',
-        bg: '(83,11,39)'
+        modify: 'underline',
+        bg: '(1,1,1)'
     },
     message: {
-        color: '(112,22,11)',
-        modify: 'dim',
-        bg: 'white'
+        modify: 'dim'
     },
     level: {
-        color: 'blue',
-        modify: 'inverse',
         bg: '#77abce'
     }
 }
