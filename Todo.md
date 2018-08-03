@@ -8,7 +8,7 @@
     - 7 - debug 
     - 8 - trivial
 - [x] colored console output
-- [ ] default colors for different levels  (option to disable this)
+- [x] default colors for different levels  (option to disable this)
     - #581845  
     - #ef9c24  
     - #ef4824 
@@ -33,3 +33,4 @@
 - [ ] trim spaces in rgb
 - [ ] bg rgb is broken
 - [ ] customizable delimiters - , . etc..
+- [ ] wrong parameter input exception
