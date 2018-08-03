@@ -15,10 +15,6 @@ greenjay.createLogger({
         new greenjay.logger({
             filePath: './log/warns.log',
             minLevel: 'warning'
-        }),
-        new greenjay.logger({
-            filePath: './log/error.log',
-            minLevel: 'error'
         })
     ]
 });
