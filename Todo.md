@@ -34,4 +34,4 @@
 - [ ] bg rgb is broken
 - [ ] customizable delimiters - , . etc..
 - [ ] wrong parameter input exception
-- [ ] private vars and funcs !!
+- [x] private vars and funcs !!
