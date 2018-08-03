@@ -66,6 +66,10 @@ var Greenjay = {
     emergency: function(message){
         var level = 'Emergency';
 
+        if(typeof this.mod.level.color === 'undefined'){
+            // this.mod.level.color = '#581845'
+        }
+
         if(this.ops.useConsole){
             var checkedModifiers = controlModifiers(this.mod);
             logToConsole(message, level, this.ops.outputType, checkedModifiers);
@@ -83,6 +87,17 @@ var Greenjay = {
     alert: function(message){
         var level = 'Alert';
         
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#ef9c24'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     },
 
     /**
@@ -93,6 +108,17 @@ var Greenjay = {
     critical: function(message){
         var level = 'Critical';
         
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#ef4824'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     },
 
     /**
@@ -102,7 +128,18 @@ var Greenjay = {
      */
     error: function(message){
         var level = 'Error';
-           
+        
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#ef2424'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     },
 
     /**
@@ -113,6 +150,17 @@ var Greenjay = {
     warning: function (message){
         var level = 'Warning';
         
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#efb424'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     },
 
     /**
@@ -123,6 +171,17 @@ var Greenjay = {
     info: function(message){
         var level = 'Info';
         
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#2f89f5'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     },
 
     /**
@@ -133,6 +192,17 @@ var Greenjay = {
     debug: function(message){
         var level = 'Debug';
         
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#34ed72'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     },
 
     /**
@@ -143,6 +213,17 @@ var Greenjay = {
     trivial: function(message){
         var level = 'Trivial';
         
+        if(typeof this.mod.level.color === 'undefined'){
+            this.mod.level.color = '#d1d7d3'
+        }
+
+        if(this.ops.useConsole){
+            var checkedModifiers = controlModifiers(this.mod);
+            logToConsole(message, level, this.ops.outputType, checkedModifiers);
+        }else if(this.ops.useFile){
+            handleFiles(this.ops.filePath);
+            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        }
     }
 
 }

@@ -1,6 +1,22 @@
-- [x] log severity levels -- 1_emergency, 2_alert, 3_critical, 4_error, 5_warning, 6_info, 7_debug, 8_trivial
+- [x] log severity levels 
+    - 1 - emergency
+    - 2 - alert
+    - 3 - critical
+    - 4 - error
+    - 5 - warning
+    - 6 - info
+    - 7 - debug 
+    - 8 - trivial
 - [x] colored console output
-- [ ] default colors for different levels
+- [ ] default colors for different levels  (option to disable this)
+    - #581845  
+    - #ef9c24  
+    - #ef4824 
+    - #ef2424 
+    - #efb424 
+    - #2f89f5 
+    - #34ed72 
+    - #d1d7d3 
 - [x] text or json output
 - [x] log file output
 - [ ] on critical able to stop program
