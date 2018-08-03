@@ -2,6 +2,7 @@ var handleFiles = require('./lib/fileHandling');
 var controlModifiers = require('./lib/logModifiers');
 var logToConsole = require('./lib/logToConsole');
 var logToFile = require('./lib/logToFile');
+var normals = require('./lib/defaults');
 
 /**
  * Green-Jay Object.
@@ -9,28 +10,6 @@ var logToFile = require('./lib/logToFile');
  * @version 0.1.0
  */
 var Greenjay = {
-
-    ops : {},
-
-    defaultOps: {
-        useFile: false,
-        filePath: './',
-        outputType: 'text',
-        defaultLevelColors: true,
-    },
-    defaultMods: {
-        date: {
-
-        },
-        message: {
-
-        },
-        level: {
-
-        }
-    },
-
-    
 
     /**
      * Create Logger Options and Modify Console Output.
@@ -42,88 +21,13 @@ var Greenjay = {
      * @param {string} options.outputType Defines Output Type. - 'text' or 'json' default is 'text'.
      * @param {boolean} [options.defaultLevelColors] Disables/Enables Default Level Colors. - default is true.
      */
-    createLogger: function(options = this.defaultOps){
-        var defaulted = this.defaultOps(options);
-        console.log(defaulted)
-        this.ops = defaulted;
+    createLogger: function(options = normals.defaultOptions){
+        var defaulted = normals.defaultsOps(options);
+        normals.ops = defaulted;
 
         // array for combined logs ...logs
     },
 
-    /**
-     * Defaults Options.
-     * @param {object} ops
-     * @returns {object} ops
-     */
-    defaultOps(ops){
-        if(typeof ops.useConsole === 'undefined'){
-            ops.useConsole = true;
-        }
-        if(typeof ops.useFile === 'undefined'){
-            ops.useFile = false;
-        }
-        if(typeof ops.filePath === 'undefined'){
-            ops.filePath = './';
-        }
-        if(typeof ops.outputType === 'undefined'){
-            ops.outputType = 'text';
-        }
-        if(typeof ops.defaultLevelColors === 'undefined'){
-            ops.defaultLevelColors = true;
-        }
-        return ops;
-    },
-
-    /**
-     * Defaults Modifiers.
-     * @param {object} mod
-     * @param {string} level
-     * @returns {object} mod
-     */
-    defaultMod: function(mod, level){
-        if(typeof mod.date === 'undefined'){
-            mod.date = {};
-        }
-        if(typeof mod.message === 'undefined'){
-            mod.message = {};
-
-        }
-        if(typeof mod.level === 'undefined'){
-            mod.level = {};
-        }
-        if(typeof mod.level.color === 'undefined'){
-            if(this.ops.defaultLevelColors){
-                switch(level){
-                    case 'Emergency':
-                        mod.level.color = '#e0f795';
-                        break;
-                    case 'Alert':
-                        mod.level.color = '#ef9c24';
-                        break;
-                    case 'Critical':
-                        mod.level.color = '#ef4824';
-                        break;
-                    case 'Error':
-                        mod.level.color = '#ef2424';
-                        break;
-                    case 'Warning':
-                        mod.level.color = '#efb424';
-                        break;
-                    case 'Info':
-                        mod.level.color = '#2f89f5';
-                        break;
-                    case 'Debug':
-                        mod.level.color = '#34ed72';
-                        break;
-                    default:
-                        mod.level.color = '#ffffff';
-                        break;
-                }   
-            }
-        }
-        return mod;
-    },
-    
     /**
      * Create Emergency Level Log
      * @param {string} message
@@ -142,21 +46,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    emergency: function(message, modify=this.defaultMods){
+    emergency: function(message, modify=normals.defaultModifiers){
         var level = 'Emergency';
         
         // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}}; 
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}}; 
     },
 
     /**
@@ -177,21 +81,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    alert: function(message, modify=this.defaultMods){
+    alert: function(message, modify=normals.defaultsModifiers){
         var level = 'Alert';
         
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
@@ -212,21 +116,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    critical: function(message, modify=this.defaultMods){
+    critical: function(message, modify=normals.defaultsModifiers){
         var level = 'Critical';
         
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
@@ -247,21 +151,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    error: function(message, modify=this.defaultMods){
+    error: function(message, modify=normals.defaultsModifiers){
         var level = 'Error';
 
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
@@ -282,21 +186,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    warning: function (message, modify=this.defaultMods){
+    warning: function (message, modify=normals.defaultsModifiers){
         var level = 'Warning';
         
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
@@ -317,21 +221,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    info: function(message, modify=this.defaultMods){
+    info: function(message, modify=normals.defaultsModifiers){
         var level = 'Info';
         
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
@@ -352,21 +256,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    debug: function(message, modify=this.defaultMods){
+    debug: function(message, modify=normals.defaultsModifiers){
         var level = 'Debug';
         
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
@@ -387,21 +291,21 @@ var Greenjay = {
      * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    trivial: function(message, modify=this.defaultMods){
+    trivial: function(message, modify=normals.defaultsModifiers){
         var level = 'Trivial';
         
          // input failsafe !
-        var modded = this.defaultMod(modify, level);
+        var modded = normals.defaultsMod(modify, level);
 
-        if(this.ops.useConsole){
+        if(normals.ops.useConsole){
             var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);   
+            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
+        }else if(normals.ops.useFile){
+            handleFiles(normals.ops.filePath);
+            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
         }
         // Normalize.
-        this.defaultMods = {date:{}, message:{}, level:{}};
+        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     }
 
 }
