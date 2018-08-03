@@ -21,11 +21,10 @@
 - [x] log file output
 - [ ] on critical able to stop program
 - [ ] logging depends on prod/dev
-- [ ] timestamp + label + level + log
+- [ ] timestamp + label + level + log (add labels)
 - [ ] split console - file output by levels
 - [ ] think about options !!
 - [x] user can change color scheme
-- [ ] check ishex or not
 - [ ] add hsl to color modify
 - [ ] separate log files
 - [ ] combined log files

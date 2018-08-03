@@ -13,299 +13,174 @@ var Greenjay = {
 
     /**
      * Create Logger Options and Modify Console Output.
-     * @public
      * @param {Object} options Logger Options Object.
      * @param {boolean} [options.useConsole] Defines Should Logger Prints to Console. - default is true.
-     * @param {boolean} [options.useFile] Defines Should Logger Prints to File. - default is false.
-     * @param {string} [options.filePath] Defines Path to File. - creates folder if it doesn't exist - default is './'.
-     * @param {string} options.outputType Defines Output Type. - 'text' or 'json' default is 'text'.
+     * @param {string} [options.outputType] Defines Output Type. - 'text' or 'json' default is 'text'.
      * @param {boolean} [options.defaultLevelColors] Disables/Enables Default Level Colors. - default is true.
+     * @param {Object} [options.modify] Console Output Modify Object.
+     * @param {object} [options.modify.date] Modify Date Object.
+     * @param {object} [options.modify.message] Modify Message Object. 
+     * @param {object} [options.modify.level] Modify Level Object. 
+     * @param {string} [options.modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
+     * @param {string} [options.modify.date.modify] Changes Date Style. - Bold, Underline
+     * @param {string} [options.modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
+     * @param {string} [options.modify.message.color] Changes Message Color. - Either Hex, RGBor Keyword
+     * @param {string} [options.modify.message.modify] Changes Message Style. - Bold, Underline
+     * @param {string} [options.modify.message.bg] Changes Message Background Color. - EitherHex, RGB or Keyword
+     * @param {string} [options.modify.level.color] Changes Level Color. - Either Hex, RGB orKeyword
+     * @param {string} [options.modify.level.modify] Changes Level Style. - Bold, Underline
+     * @param {string} [options.modify.level.bg] Changes Level Background Color. - Either Hex,RGB or Keyword
+     * @param {Array} [options.logs] Log Array
+     * @public
      */
-    createLogger: function(options = normals.defaultOptions){
-        var defaulted = normals.defaultsOps(options);
-        normals.ops = defaulted;
+    createLogger: function (options = normals.defaultOptions) {
+        // ops
+        var defOps = normals.defaultsOps(options);
+        normals.ops = defOps;
+    },
 
-        // array for combined logs ...logs
+    /**
+     * @param newLog New Logging Options
+     * @param {string} newLog.filePath
+     * @param {string} newLog.minLevel
+     * @public
+     */
+    logger: function (newLog) {
+        this.levels = [
+            {level: 1, name: 'emergency'},
+            {level: 2, name: 'alert'},
+            {level: 3, name: 'critical'},
+            {level: 4, name: 'error'},
+            {level: 5, name: 'warning'},
+            {level: 6, name: 'info'},
+            {level: 7, name: 'debug'},
+            {level: 8, name: 'trivial'}
+        ]
+
+        this.filePath = newLog.filePath;
+        this.minLevel = newLog.minLevel;    
+        this.minLevelNum = this.levels.find(e => e.name === this.minLevel.toLowerCase()).level;
+
+        this.transmit = function(message, level) {
+
+            this.mods = normals.ops.modifiers;
+            this.mods = normals.defaultsMod(this.mods, level);
+            this.controledMods = controlModifiers(this.mods);
+
+            if (level <= this.minLevelNum) {
+                var levelName = this.levels.find(e => e.level === level).name;
+                if (normals.ops.logs.length < 0) {
+                    if (normals.ops.useConsole) {
+                        logToConsole(message, levelName, normals.ops.outputType, this.controledMods);
+                    }
+                } else {
+                    // handle files here !! TODO:
+                    handleFiles(this.filePath);
+                    logToFile(message, levelName, this.filePath, normals.ops.outputType);
+                    if (normals.ops.useConsole) {
+                        logToConsole(message, levelName, normals.ops.outputType, this.controledMods);
+                    }
+                }
+            }
+        }
     },
 
     /**
      * Create Emergency Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    emergency: function(message, modify=normals.defaultModifiers){
-        var level = 'Emergency';
-        
-        // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    emergency: function (message) {
+        var level = 1;
+        // loop through normals.ops.logs - bad design but it should work...
+        // works but creates doubles on console... FUTURE:
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}}; 
+        
     },
 
     /**
      * Create Alert Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    alert: function(message, modify=normals.defaultsModifiers){
-        var level = 'Alert';
-        
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    alert: function (message) {
+        var level = 2;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
      * Create Critical Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    critical: function(message, modify=normals.defaultsModifiers){
-        var level = 'Critical';
-        
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    critical: function (message) {
+        var level = 3;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
      * Create Error Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    error: function(message, modify=normals.defaultsModifiers){
-        var level = 'Error';
-
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    error: function (message) {
+        var level = 4;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
      * Create Warning Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    warning: function (message, modify=normals.defaultsModifiers){
-        var level = 'Warning';
-        
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    warning: function (message) {
+        var level = 5;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
      * Create Info Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    info: function(message, modify=normals.defaultsModifiers){
-        var level = 'Info';
-        
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    info: function (message) {
+        var level = 6;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
      * Create Debug Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
-     * @public
      */
-    debug: function(message, modify=normals.defaultsModifiers){
-        var level = 'Debug';
-        
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    debug: function (message) {
+        var level = 7;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     },
 
     /**
      * Create Trivial Level Log
      * @param {string} message
-     * @param {Object} [modify] Console Output Modify Object.
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      * @public
      */
-    trivial: function(message, modify=normals.defaultsModifiers){
-        var level = 'Trivial';
-        
-         // input failsafe !
-        var modded = normals.defaultsMod(modify, level);
-
-        if(normals.ops.useConsole){
-            var checkedModifiers = controlModifiers(modded);
-            logToConsole(message, level, normals.ops.outputType, checkedModifiers);
-        }else if(normals.ops.useFile){
-            handleFiles(normals.ops.filePath);
-            logToFile(message, level, normals.ops.filePath, normals.ops.outputType);   
+    trivial: function (message) {
+        var level = 8;
+        for(let a of normals.ops.logs){
+            a.transmit(message, level)
         }
-        // Normalize.
-        normals.defaultsModifiers = {date:{}, message:{}, level:{}};
     }
 
 }
