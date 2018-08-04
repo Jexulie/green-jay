@@ -25,12 +25,11 @@
 - [ ] split console - file output by levels
 - [ ] think about options !!
 - [x] user can change color scheme
-- [ ] add hsl to color modify
 - [ ] separate log files
 - [ ] combined log files
 - [ ] date formatting options
-- [ ] trim spaces in rgb
-- [ ] bg rgb is broken
+- [x] bg rgb is broken
 - [ ] customizable delimiters - , . etc..
 - [ ] wrong parameter input exception
 - [x] private vars and funcs !!
+- [ ] program creates multiple console logging !!
