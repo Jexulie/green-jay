@@ -2,6 +2,7 @@ var handleFiles = require('./lib/fileHandling');
 var controlModifiers = require('./lib/logModifiers');
 var logToConsole = require('./lib/logToConsole');
 var logToFile = require('./lib/logToFile');
+var normals = require('./lib/defaults');
 
 /**
  * Green-Jay Object.
@@ -10,219 +11,249 @@ var logToFile = require('./lib/logToFile');
  */
 var Greenjay = {
 
-    ops : {},
-    mod : {},
-
-    defaultOps: {
-        useFile: false,
-        filePath: './',
-        outputType: 'text'
-    },
-
-    defaultModify: {
-        date: {
-
-        },
-        message: {
-
-        },
-        level: {
-
-        }
+    /**
+     * Create Logger Options and Modify Console Output.
+     * @param {Object} options Logger Options Object.
+     * @param {boolean} [options.useConsole] Defines Should Logger Prints to Console. - default is true.
+     * @param {string} [options.outputType] Defines Output Type. - 'text' or 'json' default is 'text'.
+     * @param {boolean} [options.defaultLevelColors] Disables/Enables Default Level Colors. - default is true.
+     * @param {Object} [options.modify] Console Output Modify Object.
+     * @param {object} [options.modify.date] Modify Date Object.
+     * @param {object} [options.modify.message] Modify Message Object. 
+     * @param {object} [options.modify.level] Modify Level Object. 
+     * @param {string} [options.modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
+     * @param {string} [options.modify.date.modify] Changes Date Style. - Bold, Underline
+     * @param {string} [options.modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
+     * @param {string} [options.modify.message.color] Changes Message Color. - Either Hex, RGBor Keyword
+     * @param {string} [options.modify.message.modify] Changes Message Style. - Bold, Underline
+     * @param {string} [options.modify.message.bg] Changes Message Background Color. - EitherHex, RGB or Keyword
+     * @param {string} [options.modify.level.color] Changes Level Color. - Either Hex, RGB orKeyword
+     * @param {string} [options.modify.level.modify] Changes Level Style. - Bold, Underline
+     * @param {string} [options.modify.level.bg] Changes Level Background Color. - Either Hex,RGB or Keyword
+     * @param {Array} [options.logs] Log Array
+     * @public
+     */
+    createLogger: function (options = normals.defaultOptions) {
+        // ops
+        var defOps = normals.defaultsOps(options);
+        normals.ops = defOps;
     },
 
     /**
-     * Create Logger Options and Modify Console Output.
+     * @param newLog New Logging Options
+     * @param {string} newLog.filePath
+     * @param {string} newLog.minLevel
      * @public
-     * @param {Object} options Logger Options Object.
-     * @param {Object} [modify] Console Output Modify Object.
-    * @param {boolean} [options.useConsol～e  Defines Should Logger Prints to Console.
-     * @param {boolean} [options.useFile] Defines Should Logger Prints to File.
-     * @param {string} [options.filePath] Defines Path to File. - creates folder if it doesn't exist
-     * @param {string} options.outputType Defines Output Type. - 'text' or 'json'
-     * @param {object} [modify.date] Modify Date Object.
-     * @param {object} [modify.message] Modify Message Object. 
-     * @param {object} [modify.level] Modify Level Object. 
-     * @param {string} [modify.date.color] Changes Date Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.date.modify] Changes Date Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.date.bg] Changes Date Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.color] Changes Message Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.message.modify] Changes Message Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.message.bg] Changes Message Background Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.color] Changes Level Color. - Either Hex, RGB or Keyword
-     * @param {string} [modify.level.modify] Changes Level Style. - Bold, Italic, Underline etc...
-     * @param {string} [modify.level.bg] Changes Level Background Color. - Either Hex, RGB or Keyword
      */
-    createLogger: function(options = this.defaultOps, modify = this.defaultModify){
-        this.ops = options;
-        this.mod = modify;
+    logger: function (newLog) {
+        this.levels = [
+            {level: 1, name: 'emergency'},
+            {level: 2, name: 'alert'},
+            {level: 3, name: 'critical'},
+            {level: 4, name: 'error'},
+            {level: 5, name: 'warning'},
+            {level: 6, name: 'info'},
+            {level: 7, name: 'debug'},
+            {level: 8, name: 'trivial'}
+        ]
+
+        this.filePath = newLog.filePath;
+        this.minLevel = newLog.minLevel;    
+        
+
+        this.transmitToConsole = function(message, level) {
+
+            // mutates object so cant change color in defaults
+            this.mods = Object.assign({},normals.ops.modifiers);
+            var normalized = normals.defaultsMod(this.mods, level);
+            this.controledMods = controlModifiers(normalized);
+            var levelName = this.levels.find(e => e.level === level).name;
+            logToConsole(message, levelName, normals.ops.outputType, this.controledMods);
+            
+        }
+
+        this.transmitToFile = function(message, level){
+            this.minLevelNum = this.levels.find(e => e.name === this.minLevel.toLowerCase()).level;
+            this.mods = normals.ops.modifiers;
+            var normalized = normals.defaultsMod(this.mods, level);
+            this.controledMods = controlModifiers(normalized);
+            var levelName = this.levels.find(e => e.level === level).name;
+
+            if (level <= this.minLevelNum) {
+                handleFiles(this.filePath);
+                logToFile(message, levelName, this.filePath, normals.ops.outputType);
+            }
+            
+        }
     },
-    
+
     /**
      * Create Emergency Level Log
      * @param {string} message
      * @public
      */
-    emergency: function(message){
-        var level = 'Emergency';
-
-        if(typeof this.mod.level.color === 'undefined'){
-            // this.mod.level.color = '#581845'
+    emergency: function (message) {
+        var level = 1;
+        
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
-        }   
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
+        }
+        
+        
     },
 
     /**
      * Create Alert Level Log
      * @param {string} message
-     * @public 
+     * @public
      */
-    alert: function(message){
-        var level = 'Alert';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#ef9c24'
+    alert: function (message) {
+        var level = 2;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     },
 
     /**
      * Create Critical Level Log
      * @param {string} message
-     * @public 
+     * @public
      */
-    critical: function(message){
-        var level = 'Critical';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#ef4824'
+    critical: function (message) {
+        var level = 3;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     },
 
     /**
      * Create Error Level Log
      * @param {string} message
-     * @public 
+     * @public
      */
-    error: function(message){
-        var level = 'Error';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#ef2424'
+    error: function (message) {
+        var level = 4;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     },
 
     /**
      * Create Warning Level Log
      * @param {string} message
-     * @public 
+     * @public
      */
-    warning: function (message){
-        var level = 'Warning';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#efb424'
+    warning: function (message) {
+        var level = 5;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     },
 
     /**
      * Create Info Level Log
      * @param {string} message
-     * @public 
+     * @public
      */
-    info: function(message){
-        var level = 'Info';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#2f89f5'
+    info: function (message) {
+        var level = 6;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     },
 
     /**
      * Create Debug Level Log
      * @param {string} message
-     * @public 
      */
-    debug: function(message){
-        var level = 'Debug';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#34ed72'
+    debug: function (message) {
+        var level = 7;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     },
 
     /**
      * Create Trivial Level Log
      * @param {string} message
-     * @public 
+     * @public
      */
-    trivial: function(message){
-        var level = 'Trivial';
-        
-        if(typeof this.mod.level.color === 'undefined'){
-            this.mod.level.color = '#d1d7d3'
+    trivial: function (message) {
+        var level = 8;
+        // create a dude and console it
+        if(normals.ops.useConsole){
+            var consoleer = new this.logger('', 0)
+            consoleer.transmitToConsole(message, level)
         }
 
-        if(this.ops.useConsole){
-            var checkedModifiers = controlModifiers(this.mod);
-            logToConsole(message, level, this.ops.outputType, checkedModifiers);
-        }else if(this.ops.useFile){
-            handleFiles(this.ops.filePath);
-            logToFile(message, level, this.ops.filePath, this.ops.outputType);                
+        // uses logs to write to Files
+        if(normals.ops.logs.length > 0){
+            for(let a of normals.ops.logs){
+                a.transmitToFile(message, level)
+            }
         }
     }
 

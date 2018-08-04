@@ -8,7 +8,7 @@
     - 7 - debug 
     - 8 - trivial
 - [x] colored console output
-- [ ] default colors for different levels  (option to disable this)
+- [x] default colors for different levels  (option to disable this)
     - #581845  
     - #ef9c24  
     - #ef4824 
@@ -21,15 +21,15 @@
 - [x] log file output
 - [ ] on critical able to stop program
 - [ ] logging depends on prod/dev
-- [ ] timestamp + label + level + log
+- [ ] timestamp + label + level + log (add labels)
 - [ ] split console - file output by levels
 - [ ] think about options !!
 - [x] user can change color scheme
-- [ ] check ishex or not
-- [ ] add hsl to color modify
 - [ ] separate log files
 - [ ] combined log files
 - [ ] date formatting options
-- [ ] trim spaces in rgb
-- [ ] bg rgb is broken
+- [x] bg rgb is broken
 - [ ] customizable delimiters - , . etc..
+- [ ] wrong parameter input exception
+- [x] private vars and funcs !!
+- [ ] program creates multiple console logging !!
