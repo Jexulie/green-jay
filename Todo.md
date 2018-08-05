@@ -1,4 +1,4 @@
-- [x] log severity levels 
+- [x] log severity levels.
     - 1 - emergency
     - 2 - alert
     - 3 - critical
@@ -7,8 +7,8 @@
     - 6 - info
     - 7 - debug 
     - 8 - trivial
-- [x] colored console output
-- [x] default colors for different levels  (option to disable this)
+- [x] colored console output.
+- [x] default colors for different levels  (option to disable this).
     - #581845  
     - #ef9c24  
     - #ef4824 
@@ -17,19 +17,11 @@
     - #2f89f5 
     - #34ed72 
     - #d1d7d3 
-- [x] text or json output
-- [x] log file output
-- [ ] on critical able to stop program
-- [ ] logging depends on prod/dev
-- [ ] timestamp + label + level + log (add labels)
-- [ ] split console - file output by levels
-- [ ] think about options !!
-- [x] user can change color scheme
-- [ ] separate log files
-- [ ] combined log files
-- [ ] date formatting options
-- [x] bg rgb is broken
-- [ ] customizable delimiters - , . etc..
-- [ ] wrong parameter input exception
+- [x] text or json output.
+- [x] log file output.
+- [x] user can change color scheme.
+- [x] bg rgb is broken.
 - [x] private vars and funcs !!
-- [ ] program creates multiple console logging !!
+- [ ] date formatting options.
+- [ ] on critical able to stop program.
+- [x] timestamp + label + level + log (add labels).

@@ -2,6 +2,7 @@ var greenjay = require('../index');
 
 greenjay.createLogger({
     useConsole: true,
+    stopProgramAbove: 'error',
     modifiers: {
         date:{
             color: '(152,185,52)'
@@ -11,10 +12,10 @@ greenjay.createLogger({
         }
     },
     logs: [
-        // new greenjay.logger({
-        //     filePath: './log/warns.log',
-        //     minLevel: 'warning'
-        // }),
+        new greenjay.logger({
+            filePath: './log/warns.log',
+            minLevel: 'warning'
+        }),
         // new greenjay.logger({
         //     filePath: './log/trivial.log',
         //     minLevel: 'trivial'

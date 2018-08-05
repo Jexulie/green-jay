@@ -61,18 +61,18 @@ var Greenjay = {
         this.minLevel = newLog.minLevel;    
         
 
-        this.transmitToConsole = function(message, level) {
+        this.transmitToConsole = function(message, label, level) {
 
             // mutates object so cant change color in defaults
             this.mods = Object.assign({},normals.ops.modifiers);
             var normalized = normals.defaultsMod(this.mods, level);
             this.controledMods = controlModifiers(normalized);
             var levelName = this.levels.find(e => e.level === level).name;
-            logToConsole(message, levelName, normals.ops.outputType, this.controledMods);
+            logToConsole(message, label, levelName, normals.ops.outputType, this.controledMods);
             
         }
 
-        this.transmitToFile = function(message, level){
+        this.transmitToFile = function(message, label, level){
             this.minLevelNum = this.levels.find(e => e.name === this.minLevel.toLowerCase()).level;
             this.mods = normals.ops.modifiers;
             var normalized = normals.defaultsMod(this.mods, level);
@@ -81,7 +81,7 @@ var Greenjay = {
 
             if (level <= this.minLevelNum) {
                 handleFiles(this.filePath);
-                logToFile(message, levelName, this.filePath, normals.ops.outputType);
+                logToFile(message, label, levelName, this.filePath, normals.ops.outputType);
             }
             
         }
@@ -90,30 +90,30 @@ var Greenjay = {
     /**
      * Create Emergency Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
-    emergency: function (message) {
+    emergency: function (message, label = undefined) {
         var level = 1;
         
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
-        
-        
     },
 
     /**
      * Create Alert Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
     alert: function (message) {
@@ -121,13 +121,13 @@ var Greenjay = {
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     },
@@ -135,6 +135,7 @@ var Greenjay = {
     /**
      * Create Critical Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
     critical: function (message) {
@@ -142,13 +143,13 @@ var Greenjay = {
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     },
@@ -156,6 +157,7 @@ var Greenjay = {
     /**
      * Create Error Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
     error: function (message) {
@@ -163,13 +165,13 @@ var Greenjay = {
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     },
@@ -177,6 +179,7 @@ var Greenjay = {
     /**
      * Create Warning Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
     warning: function (message) {
@@ -184,13 +187,13 @@ var Greenjay = {
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     },
@@ -198,6 +201,7 @@ var Greenjay = {
     /**
      * Create Info Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
     info: function (message) {
@@ -205,13 +209,13 @@ var Greenjay = {
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     },
@@ -219,19 +223,20 @@ var Greenjay = {
     /**
      * Create Debug Level Log
      * @param {string} message
+     * @param {string} label
      */
     debug: function (message) {
         var level = 7;
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     },
@@ -239,6 +244,7 @@ var Greenjay = {
     /**
      * Create Trivial Level Log
      * @param {string} message
+     * @param {string} label
      * @public
      */
     trivial: function (message) {
@@ -246,13 +252,13 @@ var Greenjay = {
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
-            consoleer.transmitToConsole(message, level)
+            consoleer.transmitToConsole(message, label, level)
         }
 
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message, level)
+                a.transmitToFile(message,label , level)
             }
         }
     }
