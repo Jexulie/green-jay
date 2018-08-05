@@ -63,27 +63,33 @@ var Greenjay = {
 
         this.transmitToConsole = function(message, label, level) {
 
-            var usingFiles = normals.ops.logs.length > 0;
+            // if(typeof normals.ops.logs === 'undefined'){
 
-            var shouldStop;
-            if(normals.ops.stopProgramAbove !== 'undefined'){
-                var selectedLevel = this.levels.find(e => e.name === normals.ops.stopProgramAbove).level
-                shouldStop = level <= selectedLevel ? true : false;
-            } 
+            //     var levelName = this.levels.find(e => e.level === level).name;
 
-            // mutates object so cant change color in defaults
-            this.mods = Object.assign({},normals.ops.modifiers);
-            var normalized = normals.defaultsMod(this.mods, level);
-            this.controledMods = controlModifiers(normalized);
-            var levelName = this.levels.find(e => e.level === level).name;
-            logToConsole(message, label, levelName, normals.ops.outputType, this.controledMods, shouldStop, usingFiles);
-            
+            //     logToConsole(message, label, levelName, undefined, undefined, undefined, undefined); 
+                
+            // }else{
+                var shouldStop;
+                if(normals.ops.stopProgramAbove){
+                    var selectedLevel = this.levels.find(e => e.name === normals.ops.stopProgramAbove).level
+                    shouldStop = level <= selectedLevel ? true : false;
+                } 
+    
+                var usingFiles = typeof normals.ops.logs !== 'undefined';
+                // mutates object so cant change color in defaults
+                this.mods = Object.assign({},normals.ops.modifiers);
+                var normalized = normals.defaultsMod(this.mods, level);
+                this.controledMods = controlModifiers(normalized);
+                var levelName = this.levels.find(e => e.level === level).name;
+                logToConsole(message, label, levelName, normals.ops.outputType, this.controledMods, shouldStop, usingFiles); 
+            // }
         }
 
         this.transmitToFile = function(message, label, level){
 
             var shouldStop;
-            if(normals.ops.stopProgramAbove !== 'undefined'){
+            if(normals.ops.stopProgramAbove){
                 var selectedLevel = this.levels.find(e => e.name === normals.ops.stopProgramAbove).level
                 shouldStop = level <= selectedLevel ? true : false;
             } 
@@ -110,7 +116,6 @@ var Greenjay = {
      */
     emergency: function (message, label = undefined) {
         var level = 1;
-        
         // create a dude and console it
         if(normals.ops.useConsole){
             var consoleer = new this.logger('', 0)
@@ -118,9 +123,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -140,9 +147,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -162,9 +171,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -184,9 +195,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -206,9 +219,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -228,9 +243,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -249,9 +266,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     },
@@ -271,9 +290,11 @@ var Greenjay = {
         }
 
         // uses logs to write to Files
-        if(normals.ops.logs.length > 0){
-            for(let a of normals.ops.logs){
-                a.transmitToFile(message, label, level)
+        if(typeof normals.ops.logs !== 'undefined'){
+            if(normals.ops.logs.length > 0){
+                for(let a of normals.ops.logs){
+                    a.transmitToFile(message, label, level)
+                }
             }
         }
     }

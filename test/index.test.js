@@ -1,11 +1,10 @@
 var greenjay = require('../index');
 
 greenjay.createLogger({
-    useConsole: true,
-    stopProgramAbove: 'alert',
-    modifiers: {
-        date:{
-            color: '(152,185,52)'
+    outputType: 'json',
+    modifiers:{
+        date: {
+            color: '#069'
         },
         message: {
             modify: 'underline'
@@ -13,29 +12,9 @@ greenjay.createLogger({
     },
     logs: [
         new greenjay.logger({
-            filePath: './log/warns.log',
-            minLevel: 'warning'
-        }),
-        // new greenjay.logger({
-        //     filePath: './log/trivial.log',
-        //     minLevel: 'trivial'
-        // }),
-        // new greenjay.logger({
-        //     filePath: './log/info.log',
-        //     minLevel: 'info'
-        // }),
-        // new greenjay.logger({
-        //     filePath: './log/error.log',
-        //     minLevel: 'error'
-        // }),
-        // new greenjay.logger({
-        //     filePath: './log/emergency.log',
-        //     minLevel: 'emergency'
-        // }),
-        // new greenjay.logger({
-        //     filePath: './log/alert.log',
-        //     minLevel: 'alert'
-        // })
+            filePath: './logs/errors.log',
+            minLevel: 'error'
+        })
     ]
 });
 
