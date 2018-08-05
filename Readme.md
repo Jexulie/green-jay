@@ -74,7 +74,7 @@ useConsole | boolean | true | Defines Should Logger Prints to Console.
 outputType | string | text | Defines Output Type. - 'text' or 'json'
 defaultLevelColors | boolean | true | Disables/Enables Default Level Colors [Default Colors of Levels](#colors)
 stopProgramAbove | string | Does Not Stop Program | Stops Program If Selected Level and Above Occurs.
-modify | object | Default Settings. | [more info about modify](#modify)
+modify | object | Default Settings. | [more info about modify](#modifiers)
 logs | object | No Log Writing to File. | [more info about logs](#logs)
 
 ### Modifiers
