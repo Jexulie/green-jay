@@ -105,7 +105,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -127,7 +127,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -149,7 +149,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -171,7 +171,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -193,7 +193,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -215,7 +215,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -236,7 +236,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     },
@@ -258,7 +258,7 @@ var Greenjay = {
         // uses logs to write to Files
         if(normals.ops.logs.length > 0){
             for(let a of normals.ops.logs){
-                a.transmitToFile(message,label , level)
+                a.transmitToFile(message, label, level)
             }
         }
     }
