@@ -1,7 +1,7 @@
 {
   "name": "green-jay",
   "version": "1.0.1",
-  "description": "dev in progress",
+  "description": "A Javascript Logger.",
   "main": "index.js",
   "keywords": [
     "logger",
