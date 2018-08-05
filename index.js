@@ -17,6 +17,7 @@ var Greenjay = {
      * @param {boolean} [options.useConsole] Defines Should Logger Prints to Console. - default is true.
      * @param {string} [options.outputType] Defines Output Type. - 'text' or 'json' default is 'text'.
      * @param {boolean} [options.defaultLevelColors] Disables/Enables Default Level Colors. - default is true.
+     * @param {string} [options.stopProgramAbove] Stops Program If Selected Level and Above Occurs.
      * @param {Object} [options.modify] Console Output Modify Object.
      * @param {object} [options.modify.date] Modify Date Object.
      * @param {object} [options.modify.message] Modify Message Object. 
@@ -58,21 +59,35 @@ var Greenjay = {
         ]
 
         this.filePath = newLog.filePath;
-        this.minLevel = newLog.minLevel;    
-        
+        this.minLevel = newLog.minLevel;
 
         this.transmitToConsole = function(message, label, level) {
+
+            var usingFiles = normals.ops.logs.length > 0;
+
+            var shouldStop;
+            if(normals.ops.stopProgramAbove !== 'undefined'){
+                var selectedLevel = this.levels.find(e => e.name === normals.ops.stopProgramAbove).level
+                shouldStop = level <= selectedLevel ? true : false;
+            } 
 
             // mutates object so cant change color in defaults
             this.mods = Object.assign({},normals.ops.modifiers);
             var normalized = normals.defaultsMod(this.mods, level);
             this.controledMods = controlModifiers(normalized);
             var levelName = this.levels.find(e => e.level === level).name;
-            logToConsole(message, label, levelName, normals.ops.outputType, this.controledMods);
+            logToConsole(message, label, levelName, normals.ops.outputType, this.controledMods, shouldStop, usingFiles);
             
         }
 
         this.transmitToFile = function(message, label, level){
+
+            var shouldStop;
+            if(normals.ops.stopProgramAbove !== 'undefined'){
+                var selectedLevel = this.levels.find(e => e.name === normals.ops.stopProgramAbove).level
+                shouldStop = level <= selectedLevel ? true : false;
+            } 
+
             this.minLevelNum = this.levels.find(e => e.name === this.minLevel.toLowerCase()).level;
             this.mods = normals.ops.modifiers;
             var normalized = normals.defaultsMod(this.mods, level);
@@ -81,7 +96,7 @@ var Greenjay = {
 
             if (level <= this.minLevelNum) {
                 handleFiles(this.filePath);
-                logToFile(message, label, levelName, this.filePath, normals.ops.outputType);
+                logToFile(message, label, levelName, this.filePath, normals.ops.outputType, shouldStop);
             }
             
         }
@@ -116,7 +131,7 @@ var Greenjay = {
      * @param {string} label
      * @public
      */
-    alert: function (message) {
+    alert: function (message, label = undefined) {
         var level = 2;
         // create a dude and console it
         if(normals.ops.useConsole){
@@ -138,7 +153,7 @@ var Greenjay = {
      * @param {string} label
      * @public
      */
-    critical: function (message) {
+    critical: function (message, label = undefined) {
         var level = 3;
         // create a dude and console it
         if(normals.ops.useConsole){
@@ -160,7 +175,7 @@ var Greenjay = {
      * @param {string} label
      * @public
      */
-    error: function (message) {
+    error: function (message, label = undefined) {
         var level = 4;
         // create a dude and console it
         if(normals.ops.useConsole){
@@ -182,7 +197,7 @@ var Greenjay = {
      * @param {string} label
      * @public
      */
-    warning: function (message) {
+    warning: function (message, label = undefined) {
         var level = 5;
         // create a dude and console it
         if(normals.ops.useConsole){
@@ -204,7 +219,7 @@ var Greenjay = {
      * @param {string} label
      * @public
      */
-    info: function (message) {
+    info: function (message, label = undefined) {
         var level = 6;
         // create a dude and console it
         if(normals.ops.useConsole){
@@ -225,7 +240,7 @@ var Greenjay = {
      * @param {string} message
      * @param {string} label
      */
-    debug: function (message) {
+    debug: function (message, label = undefined) {
         var level = 7;
         // create a dude and console it
         if(normals.ops.useConsole){
@@ -247,7 +262,7 @@ var Greenjay = {
      * @param {string} label
      * @public
      */
-    trivial: function (message) {
+    trivial: function (message, label = undefined) {
         var level = 8;
         // create a dude and console it
         if(normals.ops.useConsole){

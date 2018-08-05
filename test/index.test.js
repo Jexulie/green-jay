@@ -2,7 +2,7 @@ var greenjay = require('../index');
 
 greenjay.createLogger({
     useConsole: true,
-    stopProgramAbove: 'error',
+    stopProgramAbove: 'alert',
     modifiers: {
         date:{
             color: '(152,185,52)'
