@@ -30,6 +30,19 @@ greenjay.createLogger({
 ```
 
 ### Logging
+
+All functions
+```javascript
+    greenjay.emergency('Some Emergency');
+    greenjay.alert('Some Alert');
+    greenjay.critical('Some Critical');
+    greenjay.error('Some Error');
+    greenjay.warning('Some Warning');
+    greenjay.info('Some Info');
+    greenjay.debug('Some Debug');
+    greenjay.trivial('Some Trivial');
+```
+#### Labels
 ```javascript
 // can give a label to it too..
 greenjay.alert('PANIC!!', 'remember to panic.');
