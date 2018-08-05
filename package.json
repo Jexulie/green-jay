@@ -1,15 +1,11 @@
 {
   "name": "green-jay",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "dev in progress",
   "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "author": "Jexulie",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.1"
-  },
-  "devDependencies": {}
+  }
 }

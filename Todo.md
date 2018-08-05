@@ -23,6 +23,6 @@
 - [x] bg rgb is broken.
 - [x] private vars and funcs !!
 - [ ] date formatting options.
-- [ ] on critical able to stop program.
+- [x] on critical able to stop program.
 - [x] timestamp + label + level + log (add labels).
 - [ ] unacceptable input returns exception (maybe)
