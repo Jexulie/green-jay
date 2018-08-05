@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "dev in progress",
   "main": "index.js",
+  "keywords": [
+    "logger",
+    "javascript",
+    "log",
+    "colors"
+  ],
   "author": "Jexulie",
   "license": "MIT",
   "dependencies": {
