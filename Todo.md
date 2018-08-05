@@ -26,4 +26,5 @@
 - [x] on critical able to stop program.
 - [x] timestamp + label + level + log (add labels).
 - [ ] unacceptable input returns exception (maybe)
-- [ ] doesnt log obj / array / func
+- [x] doesnt log obj / array / func
+- [ ] cant get function logged in an array -> null
